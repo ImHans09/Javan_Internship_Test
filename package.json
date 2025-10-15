@@ -1,0 +1,23 @@
+{
+  "name": "javan_internship_test",
+  "version": "1.0.0",
+  "description": "This is Javan internship test project",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "Muhammad Rayhan Permana",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express": "^5.1.0",
+    "hbs": "^4.2.0",
+    "pg": "^8.16.3",
+    "validator": "^13.15.15"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
