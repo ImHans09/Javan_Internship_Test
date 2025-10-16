@@ -2,8 +2,7 @@
   "name": "javan_internship_test",
   "version": "1.0.0",
   "description": "This is Javan internship test project",
-  "main": "index.js",
-  "type": "module",
+  "main": "api/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js"
@@ -13,6 +12,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "connect-flash": "^0.1.1",
+    "connect-pg-simple": "^10.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-session": "^1.18.2",

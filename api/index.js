@@ -1,29 +1,35 @@
-import bcrypt from 'bcrypt';
-import dotenv from 'dotenv'
-import express from 'express';
-import flash from 'connect-flash';
-import session from 'express-session';
-import validator from 'validator';
-import { Pool } from 'pg';
+const bcrypt = require('bcrypt');
+const connectPgSimple = require('connect-pg-simple');
+const dotenv = require('dotenv');
+const express = require('express');
+const flash = require('connect-flash');
+const path = require('path');
+const session = require('express-session');
+const validator = require('validator');
+const { Pool } = require('pg');
 
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const pgSession = connectPgSimple(session);
+const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
 const pool = new Pool({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_DATABASE,
-  max: process.env.DB_MAX
+  connectionString: process.env.DATABASE_URL,
+  max: process.env.DB_MAX,
+  ssl: isProduction ? { rejectUnauthorized: false } : false
 });
 
 app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, '..', 'views'));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
-  secret: 'keySecret',
+  store: new pgSession({
+    pool: pool,
+    tableName: 'user_sessions',
+    createTableIfMissing: true
+  }),
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false, maxAge: 3600000 }
@@ -170,6 +176,4 @@ async function deleteUser(req, res) {
   }
 }
 
-app.listen(port, () => {
-  console.log(`Web application can be accessed at http://localhost:3000`);
-});
+module.exports = app;
